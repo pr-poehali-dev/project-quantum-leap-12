@@ -231,7 +231,7 @@ export default function Index() {
             rel="noopener noreferrer"
             className="inline-block bg-black text-white text-lg font-bold uppercase tracking-wider px-12 py-5 hover:bg-neutral-900 transition-colors"
           >
-            {expired ? "Купить за 4 990 ₽" : "Купить за 3 990 ₽"}
+            Купить
           </a>
         </div>
       </section>
