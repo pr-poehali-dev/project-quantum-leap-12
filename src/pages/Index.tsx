@@ -60,7 +60,7 @@ export default function Index() {
       {/* Screen 1 — Hero */}
       <section className="pt-28 pb-16 md:pt-32 md:pb-20 px-4 md:px-8 container mx-auto">
         <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 md:col-span-7 mb-8 md:mb-0">
+          <div className="col-span-12">
             <p className="text-sm uppercase tracking-widest mb-6 text-neutral-500">
               28 февраля · 19:00 МСК · Онлайн
             </p>
@@ -114,14 +114,7 @@ export default function Index() {
             )}
           </div>
 
-          <div className="col-span-12 md:col-span-5 flex items-center justify-center">
-            <div className="relative w-full aspect-square bg-red-600 flex items-center justify-center">
-              <span className="text-white text-[120px] md:text-[160px] font-bold leading-none tracking-tighter">
-                1:1
-              </span>
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-black"></div>
-            </div>
-          </div>
+
         </div>
       </section>
 
