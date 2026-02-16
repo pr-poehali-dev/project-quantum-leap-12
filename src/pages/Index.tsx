@@ -1,4 +1,35 @@
+import { useState, useEffect } from "react";
+
+function useCountdown(targetDate: Date) {
+  const [timeLeft, setTimeLeft] = useState(() => {
+    const diff = targetDate.getTime() - Date.now();
+    return diff > 0 ? diff : 0;
+  });
+
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+    const id = setInterval(() => {
+      const diff = targetDate.getTime() - Date.now();
+      setTimeLeft(diff > 0 ? diff : 0);
+    }, 1000);
+    return () => clearInterval(id);
+  }, [targetDate, timeLeft]);
+
+  const days = Math.floor(timeLeft / 86400000);
+  const hours = Math.floor((timeLeft % 86400000) / 3600000);
+  const minutes = Math.floor((timeLeft % 3600000) / 60000);
+  const seconds = Math.floor((timeLeft % 60000) / 1000);
+  const expired = timeLeft <= 0;
+
+  return { days, hours, minutes, seconds, expired };
+}
+
+const PAYMENT_URL = "https://algo-base.ru/buy-salary-intensive";
+const DISCOUNT_DEADLINE = new Date("2025-02-22T23:59:59+03:00");
+
 export default function Index() {
+  const { days, hours, minutes, seconds, expired } = useCountdown(DISCOUNT_DEADLINE);
+
   return (
     <main className="min-h-screen bg-white">
       {/* Navigation */}
@@ -15,7 +46,9 @@ export default function Index() {
               Формат
             </a>
             <a
-              href="#buy"
+              href={PAYMENT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-sm uppercase tracking-widest bg-red-600 text-white px-4 py-1 hover:bg-red-700 transition-colors"
             >
               Купить
@@ -46,7 +79,9 @@ export default function Index() {
 
             <div className="flex flex-col sm:flex-row sm:items-center gap-6">
               <a
-                href="#buy"
+                href={PAYMENT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block bg-red-600 text-white text-lg font-bold uppercase tracking-wider px-8 py-4 hover:bg-red-700 transition-colors text-center"
               >
                 Купить со скидкой
@@ -58,6 +93,25 @@ export default function Index() {
                 <p className="text-sm text-neutral-500">Цена до 22 февраля</p>
               </div>
             </div>
+
+            {!expired && (
+              <div className="mt-8 border-2 border-black p-6 inline-block">
+                <p className="text-sm uppercase tracking-widest text-neutral-500 mb-3">До конца скидки</p>
+                <div className="flex gap-6">
+                  {[
+                    { value: days, label: "дн" },
+                    { value: hours, label: "ч" },
+                    { value: minutes, label: "мин" },
+                    { value: seconds, label: "сек" },
+                  ].map((item) => (
+                    <div key={item.label} className="text-center">
+                      <span className="text-4xl md:text-5xl font-bold tracking-tighter block">{String(item.value).padStart(2, "0")}</span>
+                      <span className="text-xs uppercase tracking-widest text-neutral-500">{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="col-span-12 md:col-span-5 flex items-center justify-center">
@@ -108,7 +162,9 @@ export default function Index() {
                 </p>
               </div>
               <a
-                href="#buy"
+                href={PAYMENT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-10 inline-block border-2 border-white text-white text-lg font-bold uppercase tracking-wider px-8 py-4 hover:bg-white hover:text-black transition-colors text-center"
               >
                 Купить воркшоп
@@ -177,10 +233,12 @@ export default function Index() {
             До 22 февраля — <span className="font-bold text-white">3 990 ₽</span>, после — 4 990 ₽
           </p>
           <a
-            href="#"
+            href={PAYMENT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-black text-white text-lg font-bold uppercase tracking-wider px-12 py-5 hover:bg-neutral-900 transition-colors"
           >
-            Купить со скидкой — 3 990 ₽
+            {expired ? "Купить — 4 990 ₽" : "Купить со скидкой — 3 990 ₽"}
           </a>
         </div>
       </section>
